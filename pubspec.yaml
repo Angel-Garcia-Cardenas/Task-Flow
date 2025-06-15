@@ -1,0 +1,27 @@
+name: todo_app
+description: Una app de listas de tareas sencilla.
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.18.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  provider: ^6.0.5
+  intl: ^0.18.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_launcher_icons: ^0.13.1
+
+flutter:
+  uses-material-design: true
+  assets:
+    - lib/images/
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "C:\\Users\\Equipo\\Downloads\\todo_app\\todo_app\\web\\icons\\logoTM.png"
+  remove_alpha_ios: true
