@@ -2,8 +2,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_app/screens/login_page.dart';
+import 'package:todo_app/screens/register_page.dart';
 import 'models/task.dart';
 import 'screens/home_screen.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -60,7 +62,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
         themeMode: ThemeMode.system,
-        home: LoginPage(),
+        home: RegisterPage(),
       ),
     );
   }

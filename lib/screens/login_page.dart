@@ -185,7 +185,6 @@ class LoginPage extends StatelessWidget {
                           prefixIcon: Icon(Icons.lock, color: Colors.blue),
                           obscureText: true,
                           onChanged: (_) {
-                            // No validamos en cada cambio, solo al perder el foco
                           },
                         ),
                         Padding(
