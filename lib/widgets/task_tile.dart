@@ -2,18 +2,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_app/models/task_list.dart';
+import 'package:todo_app/widgets/add_task_dialog.dart';
 import '../models/task.dart';
 import 'package:intl/intl.dart';
 
 class TaskTile extends StatelessWidget {
   final Task task;
   final int index;
+  const TaskTile({Key? key, required this.task, required this.index}) : super(key: key);
 
-  const TaskTile({
-    super.key,
-    required this.task,
-    required this.index,
-  });
 
   @override
   Widget build(BuildContext context) {
@@ -186,9 +183,12 @@ class TaskTile extends StatelessWidget {
                   IconButton(
                     icon: const Icon(Icons.edit_outlined),
                     onPressed: () {
-                      // TODO: Implement edit functionality
+                      showDialog(
+                        context: context,
+                        builder: (_) => AddTaskDialog(task: task),
+                      );
                     },
-                    color: Colors.grey,
+                    color: theme.colorScheme.primary,
                     tooltip: 'Editar tarea',
                   ),
                   IconButton(
