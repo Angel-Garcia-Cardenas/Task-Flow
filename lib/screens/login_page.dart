@@ -158,6 +158,7 @@ class LoginPage extends StatelessWidget {
 // lib/screens/login_page.dart
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:todo_app/screens/register_page.dart';
 import '../widgets/button.dart';
 import '../widgets/my_textfield.dart';
 import 'home_screen.dart';
@@ -379,7 +380,9 @@ class _LoginPageState extends State<LoginPage> {
               Center(
                 child: TextButton(
                   onPressed: () {
-                    // navegar a RegisterPage si la tienes
+                    Navigator.of(context).push(
+                                MaterialPageRoute(builder: (_) => RegisterPage()),
+                              );
                   },
                   child: const Text(
                     'Crear una cuenta nueva',

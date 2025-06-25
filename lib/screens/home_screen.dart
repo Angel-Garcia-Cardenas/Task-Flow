@@ -11,7 +11,7 @@ import '../widgets/stats_card.dart' as stats_card;
 import '../widgets/seeker.dart'; // Asegúrate de importar tu seeker
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -43,6 +43,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    // Obtén el usuario actual de Firebase Auth
+    final user = FirebaseAuth.instance.currentUser;
+    // Usa el displayName si existe, si no, un fallback genérico
+    final displayName = user?.displayName ?? user?.email?.split('@').first ?? 'Usuario';
     final taskList = Provider.of<TaskList>(context);
     final theme = Theme.of(context);
 
@@ -75,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                             borderRadius: BorderRadius.circular(24),
                             onTap: () {
                               Navigator.of(context).push(
-                                MaterialPageRoute(builder: (_) => const ProfileScreen()),
+                                MaterialPageRoute(builder: (_) => const ProfilePage()),
                               );
                             },
                             child: const CircleAvatar(
@@ -88,16 +92,16 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                             ),
                           ),
                           const SizedBox(width: 12),
-                          const Column(
+                          Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('Mis Tareas',
+                              const Text('Mis Tareas',
                                   style: TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold,
                                       color: Colors.black)),
-                              Text('Hola, User',
-                                  style: TextStyle(color: Colors.black)),
+                              Text('Hola, $displayName',
+                                  style: const TextStyle(color: Colors.black)),
                             ],
                           ),
                           const Spacer(),
