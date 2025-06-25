@@ -1,6 +1,7 @@
 // screens/home_screen.dart - Completely redesigned UI
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_auth/firebase_auth.dart'; 
 import '../models/task.dart';
 import '../widgets/task_tile.dart';
 import '../widgets/add_task_dialog.dart' as add_task_dialog;
@@ -67,8 +68,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       padding:
                       const EdgeInsets.only(top: 65, left: 20, right: 16),
                       child: Row(
-                        children: const [
-                          CircleAvatar(
+                        children: [
+                          const CircleAvatar(
                             radius: 24,
                             backgroundColor: Colors.grey,
                             child: Icon(
@@ -76,8 +77,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                               color: Colors.white,
                             ),
                           ),
-                          SizedBox(width: 12),
-                          Column(
+                          const SizedBox(width: 12),
+                          const Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text('Mis Tareas',
@@ -89,18 +90,20 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                   style: TextStyle(color: Colors.black)),
                             ],
                           ),
-                          Spacer(),
-                          Align(
-                            alignment: Alignment.topRight,
-                            child: CircleAvatar(
+                          const Spacer(),
+                          GestureDetector(
+                            onTap: () async {
+                              await FirebaseAuth.instance.signOut();
+                            },
+                            child: const CircleAvatar(
                               radius: 24,
                               backgroundColor: Colors.white,
                               child: Icon(
-                                Icons.login,
+                                Icons.logout,
                                 color: Colors.black,
                               ),
                             ),
-                          ),
+                          )
                         ],
                       ),
                     ),

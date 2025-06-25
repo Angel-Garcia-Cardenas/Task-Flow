@@ -155,3 +155,117 @@ class LoginPage extends StatelessWidget {
     );
   }
 }*/
+import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'home_screen.dart';
+
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  final _emailCtrl = TextEditingController();
+  final _passCtrl  = TextEditingController();
+  bool _isLoading = false;
+  String? _errorMsg;
+
+  Future<void> _login() async {
+  // Primero activamos el loader. Aquí sabemos que el widget aún está montado.
+  setState(() {
+    _isLoading = true;
+    _errorMsg  = null;
+  });
+
+  try {
+    // Intentamos iniciar sesión
+    await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: _emailCtrl.text.trim(),
+      password: _passCtrl.text,
+    );
+
+    // Si el widget fue desmontado durante el await, salimos.
+    if (!mounted) return;
+
+    // Ya desactivamos el loader antes de navegar
+    setState(() => _isLoading = false);
+
+    // Navegamos al home y reemplazamos esta página
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (_) => const HomeScreen()),
+    );
+  } on FirebaseAuthException catch (e) {
+    // Si seguimos montados, volcamos el error
+    if (mounted) {
+      setState(() {
+        _errorMsg = e.message;
+        _isLoading = false;
+      });
+    }
+  } catch (e) {
+    if (mounted) {
+      setState(() {
+        _errorMsg = 'Error desconocido, inténtalo de nuevo.';
+        _isLoading = false;
+      });
+    }
+  }
+  }
+
+  @override
+  void dispose() {
+    _emailCtrl.dispose();
+    _passCtrl.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Iniciar sesión')),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            TextField(
+              controller: _emailCtrl,
+              keyboardType: TextInputType.emailAddress,
+              decoration: const InputDecoration(
+                labelText: 'Correo electrónico',
+              ),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: _passCtrl,
+              obscureText: true,
+              decoration: const InputDecoration(
+                labelText: 'Contraseña',
+              ),
+            ),
+            const SizedBox(height: 24),
+            if (_errorMsg != null)
+              Text(
+                _errorMsg!,
+                style: const TextStyle(color: Colors.red),
+              ),
+            const SizedBox(height: 12),
+            _isLoading
+              ? const CircularProgressIndicator()
+              : ElevatedButton(
+                  onPressed: _login,
+                  child: const Text('Ingresar'),
+                ),
+            const SizedBox(height: 16),
+            TextButton(
+              onPressed: () {
+                // Podrías navegar a una página de registro
+              },
+              child: const Text('¿No tienes cuenta? Regístrate'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
