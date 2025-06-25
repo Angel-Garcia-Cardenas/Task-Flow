@@ -155,115 +155,240 @@ class LoginPage extends StatelessWidget {
     );
   }
 }*/
+// lib/screens/login_page.dart
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../widgets/button.dart';
+import '../widgets/my_textfield.dart';
 import 'home_screen.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
+
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final _emailCtrl = TextEditingController();
-  final _passCtrl  = TextEditingController();
-  bool _isLoading = false;
+  // controladores
+  final emailController    = TextEditingController();
+  final passwordController = TextEditingController();
+
+  bool   _isLoading = false;
   String? _errorMsg;
 
-  Future<void> _login() async {
-  // Primero activamos el loader. Aquí sabemos que el widget aún está montado.
-  setState(() {
-    _isLoading = true;
-    _errorMsg  = null;
-  });
+  Future<void> signUserIn() async {
+    setState(() {
+      _isLoading = true;
+      _errorMsg  = null;
+    });
 
-  try {
-    // Intentamos iniciar sesión
-    await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: _emailCtrl.text.trim(),
-      password: _passCtrl.text,
-    );
-
-    // Si el widget fue desmontado durante el await, salimos.
-    if (!mounted) return;
-
-    // Ya desactivamos el loader antes de navegar
-    setState(() => _isLoading = false);
-
-    // Navegamos al home y reemplazamos esta página
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (_) => const HomeScreen()),
-    );
-  } on FirebaseAuthException catch (e) {
-    // Si seguimos montados, volcamos el error
-    if (mounted) {
-      setState(() {
-        _errorMsg = e.message;
-        _isLoading = false;
-      });
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email:    emailController.text.trim(),
+        password: passwordController.text,
+      );
+      if (!mounted) return;
+      // navegar al home reemplazando esta página
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (_) => const HomeScreen()),
+      );
+    } on FirebaseAuthException catch (e) {
+      if (mounted) {
+        setState(() {
+          _errorMsg  = e.message;
+          _isLoading = false;
+        });
+      }
+    } catch (_) {
+      if (mounted) {
+        setState(() {
+          _errorMsg  = 'Error desconocido, inténtalo de nuevo.';
+          _isLoading = false;
+        });
+      }
     }
-  } catch (e) {
-    if (mounted) {
-      setState(() {
-        _errorMsg = 'Error desconocido, inténtalo de nuevo.';
-        _isLoading = false;
-      });
-    }
-  }
   }
 
   @override
   void dispose() {
-    _emailCtrl.dispose();
-    _passCtrl.dispose();
+    emailController.dispose();
+    passwordController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Iniciar sesión')),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            TextField(
-              controller: _emailCtrl,
-              keyboardType: TextInputType.emailAddress,
-              decoration: const InputDecoration(
-                labelText: 'Correo electrónico',
+      backgroundColor: const Color(0xFFEFF3F9),
+      body: SafeArea(
+        child: Center(
+          child: ListView(
+            shrinkWrap: true,
+            padding: const EdgeInsets.symmetric(horizontal: 30),
+            children: [
+
+              // logo + título
+              const Icon(Icons.access_time_rounded, size: 100, color: Colors.blue),
+              const SizedBox(height: 8),
+              const Text(
+                'Task Flow',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
               ),
-            ),
-            const SizedBox(height: 12),
-            TextField(
-              controller: _passCtrl,
-              obscureText: true,
-              decoration: const InputDecoration(
-                labelText: 'Contraseña',
-              ),
-            ),
-            const SizedBox(height: 24),
-            if (_errorMsg != null)
+              const SizedBox(height: 4),
               Text(
-                _errorMsg!,
-                style: const TextStyle(color: Colors.red),
+                'Organiza tu día, alcanza tus metas.',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 16, color: Colors.grey[800]),
               ),
-            const SizedBox(height: 12),
-            _isLoading
-              ? const CircularProgressIndicator()
-              : ElevatedButton(
-                  onPressed: _login,
-                  child: const Text('Ingresar'),
+
+              const SizedBox(height: 50),
+              const Text(
+                'Iniciar Sesión',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Accede a tu cuenta para continuar.',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 14, color: Colors.grey[800]),
+              ),
+
+              const SizedBox(height: 25),
+
+              // Campo correo
+              const Align(
+                alignment: Alignment.centerLeft,
+                child: Text('Correo electrónico',
+                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
+              ),
+              const SizedBox(height: 8),
+              MyTextField(
+                controller: emailController,
+                hintText:   'tuemail@email.com',
+                prefixIcon: const Icon(Icons.mail_outline, color: Colors.blue),
+                obscureText: false,
+              ),
+
+              // validación email al perder foco
+              Builder(
+                builder: (context) {
+                  final email = emailController.text;
+                  String? error;
+                  if (!FocusScope.of(context).hasPrimaryFocus && email.isNotEmpty) {
+                    if (!RegExp(r"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$")
+                        .hasMatch(email)) {
+                      error = 'Formato de correo inválido';
+                    }
+                  }
+                  return error != null
+                      ? Padding(
+                          padding: const EdgeInsets.only(top: 4),
+                          child: Text(error,
+                              style: const TextStyle(color: Colors.red, fontSize: 13)),
+                        )
+                      : const SizedBox.shrink();
+                },
+              ),
+
+              const SizedBox(height: 16),
+
+              // Campo contraseña
+              const Align(
+                alignment: Alignment.centerLeft,
+                child: Text('Contraseña',
+                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
+              ),
+              const SizedBox(height: 8),
+              MyTextField(
+                controller:  passwordController,
+                hintText:    'Tu contraseña',
+                prefixIcon:  const Icon(Icons.lock, color: Colors.blue),
+                obscureText: true,
+              ),
+
+              // validación password al perder foco
+              Builder(
+                builder: (context) {
+                  final pwd = passwordController.text;
+                  String? error;
+                  if (!FocusScope.of(context).hasPrimaryFocus && pwd.isNotEmpty) {
+                    final hasLower    = RegExp(r'[a-z]').hasMatch(pwd);
+                    final hasUpper    = RegExp(r'[A-Z]').hasMatch(pwd);
+                    final hasTwoDigits= RegExp(r'(?:\D*\d){2,}').hasMatch(pwd);
+                    final hasSymbol   = RegExp(r'[!@=#/\$%&*(),.?:]').hasMatch(pwd);
+                    final validLength = pwd.length >= 8 && pwd.length <= 12;
+
+                    if (!hasLower) {
+                      error = 'Debe tener al menos una letra minúscula';
+                    } else if (!hasUpper) {
+                      error = 'Debe tener al menos una letra mayúscula';
+                    } else if (!hasTwoDigits) {
+                      error = 'Debe tener al menos dos números';
+                    } else if (!hasSymbol) {
+                      error = 'Debe tener al menos un símbolo';
+                    } else if (!validLength) {
+                      error = 'Debe tener entre 8 y 12 caracteres';
+                    }
+                  }
+                  return error != null
+                      ? Padding(
+                          padding: const EdgeInsets.only(top: 4),
+                          child: Text(error,
+                              style: const TextStyle(color: Colors.red, fontSize: 13)),
+                        )
+                      : const SizedBox.shrink();
+                },
+              ),
+
+              const SizedBox(height: 16),
+
+              // mensaje de error de login
+              if (_errorMsg != null)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 12),
+                  child: Text(
+                    _errorMsg!,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(color: Colors.red),
+                  ),
                 ),
-            const SizedBox(height: 16),
-            TextButton(
-              onPressed: () {
-                // Podrías navegar a una página de registro
-              },
-              child: const Text('¿No tienes cuenta? Regístrate'),
-            ),
-          ],
+
+              // botón o loader
+              Center(
+                child: _isLoading
+                    ? const CircularProgressIndicator()
+                    : Button(onTap: signUserIn),
+              ),
+
+              const SizedBox(height: 50),
+
+              // separador y link a registro
+              Row(children: const [
+                Expanded(child: Divider()),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8),
+                  child: Text('¿No tienes cuenta?'),
+                ),
+                Expanded(child: Divider()),
+              ]),
+
+              const SizedBox(height: 16),
+              Center(
+                child: TextButton(
+                  onPressed: () {
+                    // navegar a RegisterPage si la tienes
+                  },
+                  child: const Text(
+                    'Crear una cuenta nueva',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
