@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../widgets/my_textfield.dart';
 import '../widgets/save_chagenge.dart';
+import '../screens/home_screen.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -55,9 +56,18 @@ class ProfilePageState extends State<ProfilePage> {
         foregroundColor: Colors.black,
         elevation: 4,
         shadowColor: Colors.black.withOpacity(0.5),
+
         title: const Text(
           'Mi Perfil',
           style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        leading: IconButton(
+          icon: Icon(Icons.close, color: Colors.grey),
+          onPressed: () {
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => HomeScreen()),
+            );
+          },
         ),
       ),
       body: SafeArea(
