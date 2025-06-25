@@ -5,6 +5,7 @@ import 'package:todo_app/screens/login_page.dart';
 import 'package:todo_app/screens/register_page.dart';
 import 'models/task.dart';
 import 'screens/home_screen.dart';
+import 'screens/profile_screen.dart';
 
 
 void main() {
@@ -62,7 +63,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
         themeMode: ThemeMode.system,
-        home: LoginPage(),
+        home: ProfilePage(),
       ),
     );
   }
