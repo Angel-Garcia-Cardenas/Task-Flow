@@ -1,7 +1,9 @@
 // screens/home_screen.dart - Completely redesigned UI
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:firebase_auth/firebase_auth.dart'; 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:todo_app/models/task_list.dart';
+import 'package:todo_app/screens/profile_screen.dart'; 
 import '../models/task.dart';
 import '../widgets/task_tile.dart';
 import '../widgets/add_task_dialog.dart' as add_task_dialog;
@@ -69,12 +71,20 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       const EdgeInsets.only(top: 65, left: 20, right: 16),
                       child: Row(
                         children: [
-                          const CircleAvatar(
-                            radius: 24,
-                            backgroundColor: Colors.grey,
-                            child: Icon(
-                              Icons.person,
-                              color: Colors.white,
+                          InkWell(
+                            borderRadius: BorderRadius.circular(24),
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(builder: (_) => const ProfileScreen()),
+                              );
+                            },
+                            child: const CircleAvatar(
+                              radius: 24,
+                              backgroundColor: Colors.grey,
+                              child: Icon(
+                                Icons.person,
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                           const SizedBox(width: 12),

@@ -9,6 +9,8 @@ import 'models/task.dart';
 import 'screens/home_screen.dart';
 import 'screens/login_page.dart';
 import 'firebase_options.dart';
+import 'models/task_list.dart';
+import 'models/user_profile.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,8 +25,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<TaskList>(
-      create: (_) => TaskList(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => UserProfile()),
+        ChangeNotifierProvider(create: (_) => TaskList()),
+      ],
       child: MaterialApp(
         title: 'Todo List App',
         debugShowCheckedModeBanner: false,

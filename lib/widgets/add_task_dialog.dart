@@ -1,6 +1,7 @@
 // widgets/add_task_dialog.dart - Enhanced add task dialog
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:todo_app/models/task_list.dart';
 import '../models/task.dart';
 import './notifications.dart';
 
@@ -40,7 +41,7 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
     }
   }
 
-  void _addTask() {
+  Future<void> _addTask() async {
     if (_titleController.text.trim().isEmpty) return;
 
     final task = Task(
@@ -53,7 +54,9 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
       category: _selectedCategory,
     );
 
-    Provider.of<TaskList>(context, listen: false).addTask(task);
+    await Provider.of<TaskList>(context, listen:false)
+    .addTask(task);
+    
     Navigator.of(context).pop();
   }
 

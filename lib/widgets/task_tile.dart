@@ -1,6 +1,7 @@
 // widgets/task_tile.dart - Modern card design
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:todo_app/models/task_list.dart';
 import '../models/task.dart';
 import 'package:intl/intl.dart';
 
@@ -252,11 +253,16 @@ class TaskTile extends StatelessWidget {
               FilledButton.icon(
                 icon: const Icon(Icons.delete_outline),
                 label: const Text('Eliminar'),
-                onPressed: () {
-                  Provider.of<TaskList>(context, listen: false)
-                      .removeTask(index);
-                  Navigator.of(context).pop();
-                },
+                onPressed: () async {
+                // 1) Obtenemos el TaskList sin escuchar para no disparar rebuilds aquí
+                final taskList = Provider.of<TaskList>(context, listen: false);
+
+                // 2) Eliminamos la tarea pasándole el objeto Task
+                await taskList.removeTask(task); 
+
+                // 3) Cerramos el diálogo
+                Navigator.of(context).pop();
+              },
                 style: FilledButton.styleFrom(
                   backgroundColor: theme.colorScheme.error,
                   foregroundColor: theme.colorScheme.onError,
