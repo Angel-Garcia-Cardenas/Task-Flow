@@ -1,6 +1,7 @@
 // main.dart - Improved with better theming
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:todo_app/screens/login_page.dart';
 import 'models/task.dart';
 import 'screens/home_screen.dart';
 
@@ -59,7 +60,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
         themeMode: ThemeMode.system,
-        home: const HomeScreen(),
+        home: LoginPage(),
       ),
     );
   }
