@@ -32,52 +32,52 @@ class LoginPage extends StatelessWidget {
               Align(
                 alignment: Alignment.center,
                 child:
-                  Text(
-                    'Task Flow',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 40,
-                      fontWeight: FontWeight.bold,
-                    ),
+                Text(
+                  'Task Flow',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 40,
+                    fontWeight: FontWeight.bold,
                   ),
-              ),
-              const SizedBox(height: 3),
-          Align(
-            alignment: Alignment.center,
-            child:
-              Text(
-                'Organiza tu día, alcanza tus metas.',
-                style: TextStyle(
-                  color: Colors.grey[800],
-                  fontSize: 16,
                 ),
               ),
-          ),
+              const SizedBox(height: 3),
+              Align(
+                alignment: Alignment.center,
+                child:
+                Text(
+                  'Organiza tu día, alcanza tus metas.',
+                  style: TextStyle(
+                    color: Colors.grey[800],
+                    fontSize: 16,
+                  ),
+                ),
+              ),
 
               const SizedBox(height: 50),
               Align(
                 alignment: Alignment.center,
                 child:
-                  Text(
-                    'Iniciar Sesión',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
+                Text(
+                  'Iniciar Sesión',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
                   ),
+                ),
               ),
               const SizedBox(height: 8),
               Align(
                 alignment: Alignment.center,
                 child:
-                  Text(
-                    'Accede a tu cuenta para continuar.',
-                    style: TextStyle(
-                      color: Colors.grey[800],
-                      fontSize: 14,
-                    ),
+                Text(
+                  'Accede a tu cuenta para continuar.',
+                  style: TextStyle(
+                    color: Colors.grey[800],
+                    fontSize: 14,
                   ),
+                ),
               ),
 
               const SizedBox(height: 25),
@@ -111,6 +111,7 @@ class LoginPage extends StatelessWidget {
                         MyTextField(
                           controller: emailController,
                           hintText: 'tuemail@email.com',
+                          prefixIcon: Icon(Icons.mail_outline, color: Colors.blue),
                           obscureText: false,
                           onChanged: (_) {
                             // No validamos en cada cambio, solo al perder el foco
@@ -181,6 +182,7 @@ class LoginPage extends StatelessWidget {
                         MyTextField(
                           controller: passwordController,
                           hintText: 'Tu contraseña',
+                          prefixIcon: Icon(Icons.lock, color: Colors.blue),
                           obscureText: true,
                           onChanged: (_) {
                             // No validamos en cada cambio, solo al perder el foco
@@ -233,7 +235,7 @@ class LoginPage extends StatelessWidget {
               ),
 
               const SizedBox(height: 10),
-
+/*
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
                 child: Row(
@@ -246,7 +248,7 @@ class LoginPage extends StatelessWidget {
                   ],
                 ),
               ),
-
+*/
               const SizedBox(height: 25),
 
               // sign in button
@@ -286,18 +288,22 @@ class LoginPage extends StatelessWidget {
 
               const SizedBox(height: 25),
 
-                  const SizedBox(width: 4),
-                Align(
-                  alignment: Alignment.center,
-                  child:
-                        const Text(
-                          'Crear una cuenta nueva',
-                          style: TextStyle(
-                            color: Colors.blue,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+              const SizedBox(width: 4),
+              Align(
+                alignment: Alignment.center,
+                child: TextButton(
+                  onPressed: () {
+                    // Acción para crear una cuenta nueva
+                  },
+                  child: const Text(
+                    'Crear una cuenta nueva',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
+              ),
             ],
           ),
         ),

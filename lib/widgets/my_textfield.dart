@@ -4,6 +4,7 @@ class MyTextField extends StatelessWidget {
   final controller;
   final String hintText;
   final bool obscureText;
+  final Widget? prefixIcon; // Agregar este parámetro
   final Function(String)? onChanged; // Agregar este parámetro
 
   const MyTextField({
@@ -11,6 +12,7 @@ class MyTextField extends StatelessWidget {
     required this.controller,
     required this.hintText,
     required this.obscureText,
+    this.prefixIcon, // Agregar aquí
     this.onChanged, // Agregar aquí
   });
 
@@ -33,7 +35,9 @@ class MyTextField extends StatelessWidget {
             fillColor: Colors.white,
             filled: true,
             hintText: hintText,
-            hintStyle: TextStyle(color: Colors.grey[500])),
+            hintStyle: TextStyle(color: Colors.grey[500]),
+            prefixIcon: prefixIcon,
+        ),// Usar el parámetro aquí
       ),
     );
   }
